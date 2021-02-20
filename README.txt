@@ -4,8 +4,8 @@
 
 #### REQUIRED
 - [] Link TDAmeritrade api product key to app.
-- [] Add individual positions to portfolio.
-- [] Add multiple positions to portfolio.
+- [x] Add individual positions to portfolio.
+- [x] Add multiple positions to portfolio.
 - [x] Remove positions from portfolio.
 - [x] Apply UTC time to timezone info.
 - [x] Check for Premarket hours.
