@@ -11,6 +11,9 @@ from typing import List
 from typing import Dict
 from typing import Union
 
+from pyrobot.trades import Trade
+from pyrobot.portfolio import Portfolio
+from pyrobot.stock_frame import StockFrame
 
 class pyRobot:
 

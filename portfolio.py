@@ -4,6 +4,7 @@ from typing import Dict
 from typing import Union
 from typing import Optional
 
+from pyrobot.stock_frame import StockFrame
 
 class Portfolio:
 
