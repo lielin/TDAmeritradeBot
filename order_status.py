@@ -137,7 +137,6 @@ class OrderStatus():
     @property
     def is_pending_replace(self, refresh_order_info: bool = True) -> bool:
         """Specifies whether the order is pending replacement or not.
-        Arguments:
         Returns
         -------
         bool
@@ -191,8 +190,7 @@ class OrderStatus():
 
     @property
     def is_awaiting_parent_order(self, refresh_order_info: bool = True) -> bool:
-        """Specifies whether the order is waiting for the parent order
-        to execute or not.
+        """Specifies whether the order is waiting for the parent order to execute or not.
         Returns
         -------
         bool

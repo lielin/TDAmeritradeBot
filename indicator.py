@@ -16,13 +16,6 @@ class Indicators():
 
     def __init__(self, price_data_frame: StockFrame) -> None:
         """Initalizes the Indicator Client.
-        Arguments:
-        ----
-        price_data_frame {pyrobot.StockFrame} -- The price data frame which is used to add indicators to.
-            At a minimum this data frame must have the following columns: `['timestamp','close','open','high','low']`.
-
-        Usage:
-        ----
             >>> historical_prices_df = trading_robot.grab_historical_prices(
                 start=start_date,
                 end=end_date,
@@ -62,8 +55,6 @@ class Indicators():
                              buy_max: float = None, sell_max: float = None, condition_buy_max: Any = None,
                              condition_sell_max: Any = None) -> None:
         """Used to set an indicator where one indicator crosses above or below a certain numerical threshold.
-        Arguments:
-        ----
         indicator {str} -- The indicator key, for example `ema` or `sma`.
         buy {float} -- The buy signal threshold for the indicator.
 
@@ -104,24 +95,7 @@ class Indicators():
 
     def set_indicator_signal_compare(self, indicator_1: str, indicator_2: str, condition_buy: Any,
                                      condition_sell: Any) -> None:
-        """Used to set an indicator where one indicator is compared to another indicator.
-        Overview:
-        ----
-        Some trading strategies depend on comparing one indicator to another indicator.
-        For example, the Simple Moving Average crossing above or below the Exponential
-        Moving Average. This will be used to help build those strategies that depend
-        on this type of structure.
-        Arguments:
-        ----
-        indicator_1 {str} -- The first indicator key, for example `ema` or `sma`.
-        indicator_2 {str} -- The second indicator key, this is the indicator we will compare to. For example,
-            is the `sma` greater than the `ema`.
-        condition_buy {str} -- The operator which is used to evaluate the `buy` condition. For example, `">"` would
-            represent greater than or from the `operator` module it would represent `operator.gt`.
-
-        condition_sell {str} -- The operator which is used to evaluate the `sell` condition. For example, `">"` would
-            represent greater than or from the `operator` module it would represent `operator.gt`.
-        """
+        """Used to set an indicator where one indicator is compared to another indicator."""
 
         # Define the key.
         key = "{ind_1}_comp_{ind_2}".format(
@@ -195,12 +169,6 @@ class Indicators():
 
     def rsi(self, period: int, method: str = 'wilders', column_name: str = 'rsi') -> pd.DataFrame:
         """Calculates the Relative Strength Index (RSI).
-        Arguments:
-        ----
-        period {int} -- The number of periods to use to calculate the RSI.
-        Keyword Arguments:
-        ----
-        method {str} -- The calculation methodology. (default: {'wilders'})
         Returns:
         ----
         {pd.DataFrame} -- A Pandas data frame with the RSI indicator included.

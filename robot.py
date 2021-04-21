@@ -18,14 +18,23 @@ from pyrobot.stock_frame import StockFrame
 from td.client import TDClient
 from td.utils import TDUtilities
 
-# We are going to be doing some timestamp conversions.
 milliseconds_since_epoch = TDUtilities().milliseconds_since_epoch
+
+from pyrobot.robot import PyRobot
+
+# Initialize the robot
+trading_robot = PyRobot(
+    client_id='CONSUMER_KEY_GOES_HERE',  # Place YOUR CLIENT ID HERE FROM TD AMERITRADE DEVELOPER API
+    redirect_uri='https://localhost',
+    credentials_path='credentials/td_credentials.json'  # Writes user's credentials to json file
+)
+
 
 class PyRobot:
 
     def __init__(self, client_id: str, redirect_uri: str, paper_trading: bool = True, credentials_path: str = None,
                  trading_account: str = None) -> None:
-        """Initalizes a new instance of the robot and logs into the API platform specified.
+        """Initializes a new instance of the robot and logs into the API platform specified.
         Arguments:
         ----
         client_id {str} -- The Consumer ID assigned to you during the App registration.
@@ -53,19 +62,8 @@ class PyRobot:
         self._bar_size = None
         self._bar_type = None
 
-    from pyrobot.robot import PyRobot
-
-    # Initialize the robot
-    trading_robot = PyRobot(
-        client_id='YOUR_ID_GOES_HERE',  # Place YOUR CLIENT ID HERE FROM TD AMERITRADE DEVELOPER API
-        redirect_uri='YOUR_REDIRECT_URL_GOES_HERE',  # PLACE YOUR REDIRECT URL FROM TD AMERITRADE API ACCOUNT
-        credentials_path='YOUR_PATH_GOES_HERE'  # SELECT WHERE THE JSON FILE SHOULD BE SAVED
-    )
-
     def _create_session(self) -> TDClient:
         """Start a new session.
-        Creates a new session with the TD Ameritrade API and logs the user into
-        the new session.
         Returns:
         ----
         TDClient -- A TDClient object with an authenticated sessions.
@@ -86,8 +84,7 @@ class PyRobot:
     @property
     def pre_market_open(self) -> bool:
         """Checks if pre-market is open.
-        Uses the datetime module to create US Pre-Market Equity hours in
-        UTC time.
+        Uses the datetime module to create US Pre-Market Equity hours in UTC time.
         Usage:
         ----
             >>> trading_robot = PyRobot(
@@ -230,24 +227,6 @@ class PyRobot:
     def create_trade(self, trade_id: str, enter_or_exit: str, long_or_short: str, order_type: str = 'mkt',
                      price: float = 0.0, stop_limit_price=0.0) -> Trade:
         """Initalizes a new instance of a Trade Object.
-        This helps simplify the process of building an order by using pre-built templates that can be
-        easily modified to incorporate more complex strategies.
-        Arguments:
-        ----
-        trade_id {str} -- The ID associated with the trade, this can then be used to access the trade during runtime.
-        enter_or_exit {str} -- Defines whether this trade will be used to enter or exit a position.
-            If used to enter, specify `enter`. If used to exit, speicfy `exit`.
-        long_or_short {str} -- Defines whether this trade will be used to go long or short a position.
-            If used to go long, specify `long`. If used to go short, speicfy `short`.
-        Keyword Arguments:
-        ----
-        order_type {str} -- Defines the type of order to initalize. Possible values
-            are `'mkt', 'lmt', 'stop', 'stop-lmt', 'trailign-stop'` (default: {'mkt'})
-        price {float} -- The Price to be associate with the order. If the order type is `stop` or `stop-lmt` then
-            it is the stop price, if it is a `lmt` order then it is the limit price, and `mkt` is the market
-            price.(default: {0.0})
-        stop_limit_price {float} -- Only used if the order is a `stop-lmt` and represents the limit price of
-            the `stop-lmt` order. (default: {0.0})
         Usage:
         ----
             >>> trading_robot = PyRobot(
@@ -333,11 +312,6 @@ class PyRobot:
 
     def grab_current_quotes(self) -> dict:
         """Grabs the current quotes for all positions in the portfolio.
-        Makes a call to the TD Ameritrade Get Quotes endpoint with all
-        the positions in the portfolio. If only one position exist it will
-        return a single dicitionary, otherwise a nested dictionary.
-        Usage:
-        ----
             >>> trading_robot = PyRobot(
                 client_id=CLIENT_ID,
                 redirect_uri=REDIRECT_URI,

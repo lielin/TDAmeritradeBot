@@ -103,8 +103,7 @@ class StockFrame():
         return price_df
 
     def add_rows(self, data: Dict) -> None:
-        """Adds a new row to our StockFrame.
-        """
+        """Adds a new row to our StockFrame."""
 
         column_names = ['open', 'close', 'high', 'low', 'volume']
 

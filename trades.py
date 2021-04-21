@@ -6,17 +6,7 @@ from typing import Dict
 
 from td.client import TDClient
 
-
 class Trade():
-    """
-    Object Type:
-    ----
-    `pyrobot.Trade`
-    Overview:
-    ----
-    Reprsents the Trade Object which is used to create new trades,
-    add customizations to them, and easily modify existing content.
-    """
 
     def __init__(self):
         """Initalizes a new order."""
@@ -54,18 +44,6 @@ class Trade():
     def new_trade(self, trade_id: str, order_type: str, side: str, enter_or_exit: str, price: float = 0.00,
                   stop_limit_price: float = 0.00) -> dict:
         """Creates a new Trade object template.
-        A trade object is a template that can be used to help build complex trades
-        that normally are prone to errors when writing the JSON. Additionally, it
-        will help the process of storing trades easier.
-        Arguments:
-        ----
-        order_type {str} -- The type of order you would like to create. Can be
-            one of the following: ['mkt', 'lmt', 'stop', 'stop_lmt', 'trailing_stop']
-        side {str} -- The side the trade will take, can be one of the
-            following: ['long', 'short']
-        enter_or_exit {str} -- Specifices whether this trade will enter a new position
-            or exit an existing position. If used to enter then specify, 'enter'. If
-            used to exit a trade specify, 'exit'.
         Returns:
         ----
         {dict} -- [description]
@@ -166,14 +144,6 @@ class Trade():
     def instrument(self, symbol: str, quantity: int, asset_type: str, sub_asset_type: str = None,
                    order_leg_id: int = 0) -> dict:
         """Adds an instrument to a trade.
-        Arguments:
-        ----
-        symbol {str} -- The instrument ticker symbol.
-        quantity {int} -- The quantity of shares to be purchased.
-        asset_type {str} -- The instrument asset type. For example, `EQUITY`.
-        Keyword Arguments:
-        ----
-        sub_asset_type {str} -- The instrument sub-asset type, not always needed. For example, `ETF`. (default: {None})
         Returns:
         ----
         {dict} -- A dictionary with the instrument.
@@ -193,12 +163,6 @@ class Trade():
 
     def add_option_instrument(self, symbol: str, quantity: int, order_leg_id: int = 0) -> dict:
         """Adds an Option instrument to the Trade object.
-        Args:
-        ----
-        symbol (str): The option symbol to be added.
-        quantity (int): The number of option contracts to purchase or sell.
-        order_leg_id (int, optional): The position of the instrument within the
-            the Order Leg Collection.. Defaults to 0.
         Returns:
         ----
         dict: The order leg containing the option contract.
@@ -216,30 +180,13 @@ class Trade():
         return leg
 
     def good_till_cancel(self, cancel_time: datetime) -> None:
-        """Converts an order to a `Good Till Cancel` order.
-        Arguments:
-        ----
-        cancel_time {datetime.datetime} -- A datetime object representing the
-            cancel time of the order.
-        """
+        """Converts an order to a `Good Till Cancel` order."""
 
         self.order['duration'] = 'GOOD_TILL_CANCEL'
         self.order['cancelTime'] = cancel_time.isoformat()
 
     def modify_side(self, side: str, leg_id: int = 0) -> None:
-        """Modifies the Side the order takes.
-        Arguments:
-        ----
-        side {str} -- The side to be set. Can be one of the following:
-            `['buy', 'sell', 'sell_short', 'buy_to_cover']`.
-        Keyword Arguments:
-        ----
-        leg_id {int} -- The leg you want to adjust. (default: {0})
-        Raises:
-        ----
-        ValueError -- If the `side` argument does not match one of the valid sides,
-            then a ValueError will be raised.
-        """
+        """Modifies the Side the order takes."""
 
         # Validate the Side.
         if side and side not in ['buy', 'sell', 'sell_short', 'buy_to_cover', 'sell_to_close', 'buy_to_open']:
@@ -258,19 +205,7 @@ class Trade():
                       stop_percentage: bool = False, profit_percentage: bool = False,
                       stop_limit: bool = False, make_one_cancels_other: bool = True,
                       limit_size: float = 0.00, limit_percentage: bool = False):
-        """Adds a Stop Loss(or Stop-Limit order), and a limit Order
-        Arguments:
-        ----
-        profit_size {float} -- The size of desired profit. For example, `0.10`.
-        profit_percentage {float} -- Specifies whether the `profit_size` is in absolute dollars `False` or
-            in percentage terms `True`.
-        stop_size {float} -- The size of desired stop loss. For example, `0.10`.
-        stop_percentage {float} -- Specifies whether the `stop_size` is in absolute dollars `False` or
-            in percentage terms `True`.
-        Keyword Arguments:
-        ----
-        stop_limit {bool} -- If `True` makes the stop-loss a stop-limit. (default: {False})
-        """
+        """Adds a Stop Loss(or Stop-Limit order), and a limit Order"""
 
         if not self._triggered_added:
             self._convert_to_trigger()
@@ -302,14 +237,6 @@ class Trade():
 
     def add_stop_loss(self, stop_size: float, percentage: bool = False) -> bool:
         """Add's a stop loss order to exit the position when a certain loss is reached.
-        Arguments:
-        ----
-        stop_size {float} -- The size of the stop from the current trading price. For example, `0.10`.
-        Keyword Arguments:
-        ----
-        percentage {bool} -- Specifies whether the `stop_size` adjustment is a
-            `percentage` or an `absolute dollar amount`. If `True` will calculate the
-            stop size as a percentage of the current price. (default: {False})
         Returns:
         ----
         {bool} -- `True` if the order was added.
@@ -361,18 +288,6 @@ class Trade():
     def add_stop_limit(self, stop_size: float, limit_size: float, stop_percentage: bool = False,
                        limit_percentage: bool = False):
         """Add's a Stop Limit Order to exit a trade when a stop price is reached but does not exceed the limit.
-        Arguments:
-        ----
-        stop_size {float} -- The size of the stop from the current trading price. For example, `0.10`.
-        limit_size {float} -- The size of the limit from the current stop price. For example, `0.10`.
-        Keyword Arguments:
-        ----
-        stop_percentage {bool} -- Specifies whether the `stop_size` adjustment is a
-            `percentage` or an `absolute dollar amount`. If `True` will calculate the
-            stop size as a percentage of the current price. (default: {False})
-        limit_percentage {bool} -- Specifies whether the `limit_size` adjustment is a
-            `percentage` or an `absolute dollar amount`. If `True` will calculate the
-            limit size as a percentage of the current stop price. (default: {False})
         Returns:
         ----
         {bool} -- `True` if the order was added.
@@ -443,12 +358,6 @@ class Trade():
 
     def _calculate_new_price(self, price: float, adjustment: float, percentage: bool) -> float:
         """Calculates an adjusted price given an old price.
-        Arguments:
-        ----
-        price {float} -- The original price.
-        adjustment {float} -- The adjustment to be made to the new price.
-        percentage {bool} -- Specifies whether the adjustment is a percentage adjustment `True` or
-            an absolute dollar adjustment `False`.
         Returns:
         ----
         {float} -- The new price after the adjustment has been made.
@@ -499,14 +408,6 @@ class Trade():
 
     def add_take_profit(self, profit_size: float, percentage: bool = False) -> bool:
         """Add's a Limit Order to exit a trade when a profit threshold is reached.
-        Arguments:
-        ----
-        profit_size {float} -- The size of the profit you want to make. For example, `0.10`.
-        Keyword Arguments:
-        ----
-        percentage {bool} -- Specifies whether the `profit_size` passed through is a
-            `percentage` or an `absolute dollar amount`. If `True` will calculate the
-            profit as a percentage of the current price. (default: {False})
         Returns:
         ----
         {bool} -- `True` if the order was added.
@@ -561,10 +462,6 @@ class Trade():
 
     def add_one_cancels_other(self, orders: List[Dict] = None) -> Dict:
         """Add's a One Cancel's Other Order
-        Arguments:
-        ----
-        orders {List[Dict]} -- A list of two orders that will cancel each other
-            if one of those orders are executed.
         Returns:
         ----
         {Dict} -- A template that can be added to a Child Order Strategies list.
@@ -593,14 +490,7 @@ class Trade():
         self._one_cancels_other = True
 
     def _convert_to_trigger(self):
-        """Converts a regular order to a trigger order.
-        Overview:
-        ----
-        Trigger orders can be used to have a stop loss orders, or take profit
-        orders placed right after the main order has been placed. This helps
-        protect the order when possible and take profit when thresholds are
-        reached.
-        """
+        """Converts a regular order to a trigger order."""
 
         # Only convert to a trigger order, if it already isn't one.
         if self.order and not self._triggered_added:
@@ -647,11 +537,7 @@ class Trade():
 
     @order_response.setter
     def order_response(self, order_response_dict: dict) -> None:
-        """Sets the order response from submitting an order.
-        Arguments:
-        ----
-        order_response_dict {dict} -- The order response dictionary.
-        """
+        """Sets the order response from submitting an order."""
 
         self._order_response = order_response_dict
 
@@ -682,15 +568,6 @@ class Trade():
     def add_leg(self, order_leg_id: int, symbol: str, quantity: int, asset_type: str, sub_asset_type: str = None) -> \
     List[dict]:
         """Adds an instrument to a trade.
-        Arguments:
-        ----
-        order_leg_id {int} -- The position you want the new leg to be in the leg collection.
-        symbol {str} -- The instrument ticker symbol.
-        quantity {int} -- The quantity of shares to be purchased.
-        asset_type {str} -- The instrument asset type. For example, `EQUITY`.
-        Keyword Arguments:
-        ----
-        sub_asset_type {str} -- The instrument sub-asset type, not always needed. For example, `ETF`. (default: {None})
         Returns:
         ----
         {dict} -- The order's order leg collection.
@@ -732,19 +609,7 @@ class Trade():
         return len(self.order['orderLegCollection'])
 
     def modify_price(self, new_price: float, price_type: str) -> None:
-        """Used to change the price that is specified.
-        Arguments:
-        ----
-        new_price (float): The new price to be set.
-        price_type (str): The type of price that should be modified. Can
-            be one of the following: [
-                'price',
-                'stop-price',
-                'limit-price',
-                'stop-limit-stop-price',
-                'stop-limit-limit-price'
-            ]
-        """
+        """Used to change the price that is specified."""
 
         if price_type == 'price':
             self.order['price'] = new_price

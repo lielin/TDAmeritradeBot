@@ -5,6 +5,7 @@
 - [Overview](#overview)
 - [Authentication Workflow](#Authentication Workflow)
 - [Usage](#usage)
+- [Video Walkthrough](#Video Walkthrough)
 
 ## Overview
 
@@ -84,3 +85,8 @@ trading_robot = PyRobot(
     credentials_path='path/to/td_state.json'
 )
 ```
+
+## Video Walkthrough
+
+Here's a walkthrough of implemented user stories:
+https://recordit.co/W0zTtirOBh Gif created with https://recordit.co/

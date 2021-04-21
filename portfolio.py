@@ -13,7 +13,7 @@ from td.client import TDClient
 class Portfolio():
 
     def __init__(self, account_number: Optional[str] = None) -> None:
-        """Initalizes a new instance of the Portfolio object."""
+        """Initializes a new instance of the Portfolio object."""
 
         self.positions = {}
         self.positions_count = 0
@@ -173,18 +173,6 @@ class Portfolio():
 
     def portfolio_metrics(self) -> dict:
         """Calculates different portfolio risk metrics using daily data.
-        Overview:
-        ----
-        To build an effective summary of our portfolio we will need to
-        calculate different metrics that help represent the risk of our
-        portfolio and it's performance. The following metrics will be calculated
-        in this method:
-        1. Standard Deviation of Percent Returns.
-        2. Covariance of Percent Returns.
-        2. Variance of Percent Returns.
-        3. Average Percent Return
-        4. Weighted Average Percent Return.
-        5. Portfolio Variance.
         Returns:
         ----
         dict -- [description]
